@@ -1,9 +1,10 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 
@@ -199,7 +200,7 @@ class _InvoiceMakerScreenState extends State<InvoiceMakerScreen> {
           return pw.Padding(
             padding: const pw.EdgeInsets.all(24),
             child: pw.Column(
-              cross: pw.CrossAxisAlignment.start,
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
                 pw.Text('TAX INVOICE', style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
                 pw.Divider(),
@@ -211,7 +212,7 @@ class _InvoiceMakerScreenState extends State<InvoiceMakerScreen> {
                 ),
                 pw.Divider(),
                 pw.Align(alignment: pw.Alignment.centerRight, child: pw.Text('Subtotal: ₹${subtotal.toStringAsFixed(2)}')),
-                pw.Align(alignment: pw.Alignment.centerRight, child: pw.Text('GST (${gstRate}%): ₹${gstAmount.toStringAsFixed(2)}')),
+                pw.Align(alignment: pw.Alignment.centerRight, child: pw.Text('GST ($gstRate%): ₹${gstAmount.toStringAsFixed(2)}')),
                 pw.Align(alignment: pw.Alignment.centerRight, child: pw.Text('Grand Total: ₹${total.toStringAsFixed(2)}', style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
               ],
             ),
@@ -332,7 +333,6 @@ class AgeCalculatorScreen extends StatefulWidget {
 }
 
 class _AgeCalculatorScreenState extends State<AgeCalculatorScreen> {
-  DateTime? _selectedDate;
   String _ageResult = "Select Date of Birth";
 
   void _calculateAge(DateTime dob) {
@@ -374,7 +374,6 @@ class _AgeCalculatorScreenState extends State<AgeCalculatorScreen> {
                   lastDate: DateTime.now(),
                 );
                 if (picked != null) {
-                  _selectedDate = picked;
                   _calculateAge(picked);
                 }
               },
@@ -437,8 +436,8 @@ class _PhotoCompressorScreenState extends State<PhotoCompressorScreen> {
 
     if (pickedFile != null) {
       File original = File(pickedFile.path);
-      List<int> bytes = await original.readAsBytes();
-      img.Image? decoded = img.decodeImage(Uint8List.fromList(bytes));
+      Uint8List bytes = await original.readAsBytes();
+      img.Image? decoded = img.decodeImage(bytes);
 
       if (decoded != null) {
         List<int> compressed = img.encodeJpg(decoded, quality: 50);
