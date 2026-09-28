@@ -24,6 +24,10 @@ jobs:
           flutter-version: '3.22.0'
           channel: 'stable'
 
+      - name: Auto-generate Android Project Structure
+        run: |
+          flutter create . --org com.pickprime.superutility --platforms android
+
       - name: Get Dependencies
         run: flutter pub get
 
