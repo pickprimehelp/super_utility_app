@@ -24,15 +24,21 @@ jobs:
           flutter-version: '3.22.0'
           channel: 'stable'
 
-      - name: Auto-generate Android Project Structure
+      - name: Auto-generate Android Project
         run: |
           flutter create . --org com.pickprime.superutility --platforms android
 
-      - name: Fix Kotlin & Gradle Versions
+      - name: Force Upgrade Kotlin Version
         run: |
-          sed -i "s/ext.kotlin_version = .*/ext.kotlin_version = '1.9.22'/" android/build.gradle || true
-          sed -i "s/ext.kotlin_version=.*/ext.kotlin_version='1.9.22'/" android/build.gradle || true
-          sed -i "s/com.android.tools.build:gradle:.*/com.android.tools.build:gradle:8.1.0'/" android/build.gradle || true
+          # Declarative settings.gradle update (Flutter 3.x default)
+          if [ -f android/settings.gradle ]; then
+            sed -i "s/id \"org.jetbrains.kotlin.android\" version \".*\"/id \"org.jetbrains.kotlin.android\" version \"1.9.22\"/g" android/settings.gradle || true
+            sed -i "s/id 'org.jetbrains.kotlin.android' version '.*'/id 'org.jetbrains.kotlin.android' version '1.9.22'/g" android/settings.gradle || true
+          fi
+          # Legacy build.gradle update
+          if [ -f android/build.gradle ]; then
+            sed -i "s/ext.kotlin_version = .*/ext.kotlin_version = '1.9.22'/g" android/build.gradle || true
+          fi
 
       - name: Get Dependencies
         run: flutter pub get
