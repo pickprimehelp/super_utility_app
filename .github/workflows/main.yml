@@ -28,6 +28,12 @@ jobs:
         run: |
           flutter create . --org com.pickprime.superutility --platforms android
 
+      - name: Fix Kotlin & Gradle Versions
+        run: |
+          sed -i "s/ext.kotlin_version = .*/ext.kotlin_version = '1.9.22'/" android/build.gradle || true
+          sed -i "s/ext.kotlin_version=.*/ext.kotlin_version='1.9.22'/" android/build.gradle || true
+          sed -i "s/com.android.tools.build:gradle:.*/com.android.tools.build:gradle:8.1.0'/" android/build.gradle || true
+
       - name: Get Dependencies
         run: flutter pub get
 
